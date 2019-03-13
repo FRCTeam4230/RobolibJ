@@ -1,0 +1,105 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.4"
+}
+
+group 'org.team4230'
+version '0.0.1-dev1'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+    // WPILib Maven
+    maven {
+        url "http://first.wpi.edu/FRC/roborio/maven/release/"
+    }
+    // CTRE Maven
+    maven {
+        url "http://devsite.ctr-electronics.com/maven/release/"
+    }
+    // REV Robotics Maven
+    maven {
+        url "http://www.revrobotics.com/content/sw/max/sdk/maven/"
+    }
+    // NavX / Central Maven
+    maven {
+        url "https://repo1.maven.org/maven2/"
+    }
+    // Team 4230 Maven repo
+    maven {
+        url  "https://dl.bintray.com/team4230/maven"
+    }
+}
+
+dependencies {
+    implementation 'edu.wpi.first.wpilibj:wpilibj-java:2019.4.1'
+    implementation 'edu.wpi.first.ntcore:ntcore-java:2019.4.1'
+    implementation 'edu.wpi.first.wpiutil:wpiutil-java:2019.4.1'
+    implementation 'com.ctre.phoenix:api-java:5.14.1'
+    implementation 'com.ctre.phoenix:wpiapi-java:5.14.1'
+    implementation 'com.kauailabs.navx.frc:navx-java:3.1.366'
+    testCompile group: "org.junit.jupiter", name: "junit-jupiter-api", version: "5.4.0"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.4.0"
+}
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+jar {
+    manifest {
+        attributes(
+                "Implementation-Vendor" : "Team 4230",
+                "Implementation-Title" : rootProject.name,
+                "Implementation-version" : this.version,
+                "Implementation-Vendor-Id" : "team4230",
+                "Build-Jdk" : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                "Created-By" : "Gradle ${gradle.gradleVersion}"
+        )
+    }
+}
+publishing {
+    publications {
+        RobolibJ(MavenPublication) {
+            from components.java
+            artifact this.sourcesJar
+            artifact this.javadocJar
+            groupId 'org.team4230'
+            artifactId 'RobolibJ'
+            version this.version
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty("bintrayUser") ?
+            project.property("bintrayUser") :
+            System.getenv("BINTRAY_USER")
+    key = project.hasProperty("bintrayKey") ?
+            project.property("bintrayKey") :
+            System.getenv("BINTRAY_KEY")
+    publications = ['RobolibJ']
+    pkg {
+        repo = 'maven'
+        name = 'RobolibJ'
+        userOrg = 'team4230'
+        licenses = ['BSD 3-Clause']
+        vcsUrl = 'https://github.com/FRCTeam4230/Robolibj'
+        version {
+            name = this.version
+            released  = new Date()
+        }
+    }
+}
+
+wrapper {
+    gradleVersion = '5.2.1'
+}
