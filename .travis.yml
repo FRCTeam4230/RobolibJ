@@ -1,0 +1,11 @@
+language: java
+
+jdk:
+  - openjdk11
+
+install:
+  - chmod +x ./gradlew
+  - ./gradlew dependencies
+
+script:
+  - ./gradlew build
