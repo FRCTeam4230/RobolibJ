@@ -1,6 +1,7 @@
 # Robolibj
 [![Download](https://api.bintray.com/packages/team4230/maven/RobolibJ/images/download.svg)](https://bintray.com/team4230/maven/RobolibJ/_latestVersion)
 [![Build Status](https://travis-ci.com/FRCTeam4230/RobolibJ.svg?branch=master)](https://travis-ci.com/FRCTeam4230/RobolibJ)
+[![codecov](https://codecov.io/gh/FRCTeam4230/RobolibJ/branch/master/graph/badge.svg)](https://codecov.io/gh/FRCTeam4230/RobolibJ)
 
 A collection of utility classes for FRC robots.
 
